@@ -6,15 +6,15 @@ An end-to-end AI/ML platform for turning customer support data into actionable i
 
 Support data → ingestion and cleaning → exploratory analysis → ML and knowledge retrieval → API and support insights.
 
-This is a high-level roadmap; only the initial repository foundation is included today.
+Dataset ingestion and initial raw-data EDA are complete; later pipeline stages remain planned.
 
 ## Current milestone
 
-**Milestone 1 — Data Foundation & Exploratory Data Analysis**
+**Milestone 2 — Data Ingestion & EDA (completed)**
 
 ### Current scope
 
-Establish a minimal Python project structure and dependencies for later data preparation and exploratory analysis. No datasets, analysis notebooks, model training, RAG, FastAPI, MLflow, Docker, or LLM integrations are implemented yet.
+The Bitext customer support train split is ingested as a raw CSV. Read the [Milestone 2 EDA report](docs/milestone-2-eda.md) for findings, limitations, and reproduction steps. Generated datasets remain local and are excluded from Git. Cleaning, preprocessing, dataset splitting, and model training have not started.
 
 ```text
 data/
@@ -22,11 +22,16 @@ data/
 │   └── .gitkeep
 └── processed/                # Cleaned and prepared data
     └── .gitkeep
-notebooks/                    # Future exploratory analysis
+docs/
+└── milestone-2-eda.md         # Findings and reproducible inspection
+notebooks/                    # Future analysis notebooks
 └── .gitkeep
 src/
 └── customer_support_ai/      # Python source package
-    └── __init__.py
+    ├── __init__.py
+    └── data/
+        ├── __init__.py
+        └── ingest.py         # Hugging Face train split → raw CSV
 tests/                        # Future automated tests
 └── .gitkeep
 .env.example                  # Empty placeholders for future API configuration
@@ -50,9 +55,16 @@ API keys are not needed for this milestone. `.env.example` contains empty placeh
 
 ## Planned next steps
 
-1. Select a real customer support dataset and document its source and schema.
-2. Inspect missing values, duplicates, data types, and ticket distributions.
-3. Add reproducible data cleaning and save prepared data under `data/processed/`.
-4. Document exploratory findings in notebooks and add tests for data preparation.
+1. Decide placeholder, typo, and text-normalization policies using the EDA findings.
+2. Prepare a reproducible preprocessing pipeline and save its outputs under `data/processed/`.
+3. Create label-aware splits that keep identical instructions together and assess template overlap.
+
+To regenerate the raw dataset from the repository root after setup:
+
+```sh
+python src/customer_support_ai/data/ingest.py
+```
+
+Output: `data/raw/bitext_customer_support_train.csv` (ignored by Git).
 
 Model development and service integrations are reserved for later milestones.
